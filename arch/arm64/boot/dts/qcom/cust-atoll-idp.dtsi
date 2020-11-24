@@ -53,7 +53,10 @@
 };
 
 &pm6150_qg {
+	qcom,hold-soc-while-full;
+	qcom,linearize-soc;
 	qcom,tcss-enable;
+	qcom,bass-enable;
 	qcom,qg-iterm-ma = <350>;
 	qcom,vbatt-cutoff-mv = <3400>;
 	qcom,vbatt-low-mv = <3500>;
