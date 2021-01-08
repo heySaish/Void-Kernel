@@ -31,7 +31,7 @@
 #include <asm/cmpxchg.h>
 
 #define ATOMIC_OP(op)							\
-static inline void op(int i, atomic_t *v)				\
+static __always_inline void op(int i, atomic_t *v)			\
 {									\
 	__lse_ll_sc_body(op, i, v);					\
 }
@@ -46,7 +46,7 @@ ATOMIC_OP(atomic_sub)
 #undef ATOMIC_OP
 
 #define ATOMIC_FETCH_OP(name, op)					\
-static inline int op##name(int i, atomic_t *v)				\
+static __always_inline int op##name(int i, atomic_t *v)			\
 {									\
 	return __lse_ll_sc_body(op##name, i, v);			\
 }
@@ -70,7 +70,7 @@ ATOMIC_FETCH_OPS(atomic_sub_return)
 #undef ATOMIC_FETCH_OPS
 
 #define ATOMIC64_OP(op)							\
-static inline void op(long i, atomic64_t *v)				\
+static __always_inline void op(long i, atomic64_t *v)			\
 {									\
 	__lse_ll_sc_body(op, i, v);					\
 }
@@ -85,7 +85,7 @@ ATOMIC64_OP(atomic64_sub)
 #undef ATOMIC64_OP
 
 #define ATOMIC64_FETCH_OP(name, op)					\
-static inline long op##name(long i, atomic64_t *v)			\
+static __always_inline long op##name(long i, atomic64_t *v)		\
 {									\
 	return __lse_ll_sc_body(op##name, i, v);			\
 }
@@ -108,7 +108,7 @@ ATOMIC64_FETCH_OPS(atomic64_sub_return)
 #undef ATOMIC64_FETCH_OP
 #undef ATOMIC64_FETCH_OPS
 
-static inline long atomic64_dec_if_positive(atomic64_t *v)
+static __always_inline long atomic64_dec_if_positive(atomic64_t *v)
 {
 	return __lse_ll_sc_body(atomic64_dec_if_positive, v);
 }
