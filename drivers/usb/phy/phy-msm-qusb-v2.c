@@ -26,7 +26,9 @@
 #include <linux/regulator/machine.h>
 #include <linux/usb/phy.h>
 #include <linux/reset.h>
+#ifdef CONFIG_DEBUG_FS
 #include <linux/debugfs.h>
+#endif
 
 /* QUSB2PHY_PWR_CTRL1 register related bits */
 #define PWR_CTRL1_POWR_DOWN		BIT(0)
@@ -911,6 +913,7 @@ static int qusb_phy_regulator_init(struct qusb_phy *qphy)
 	return 0;
 }
 
+#ifdef CONFIG_DEBUG_FS
 static int qusb_phy_create_debugfs(struct qusb_phy *qphy)
 {
 	struct dentry *file;
@@ -952,6 +955,7 @@ static int qusb_phy_create_debugfs(struct qusb_phy *qphy)
 create_err:
 	return ret;
 }
+#endif /* CONFIG_DEBUG_FS */
 
 static int qusb_phy_probe(struct platform_device *pdev)
 {
@@ -1235,7 +1239,9 @@ static int qusb_phy_probe(struct platform_device *pdev)
 		usb_remove_phy(&qphy->phy);
 
 	qphy->suspended = true;
+#ifdef CONFIG_DEBUG_FS
 	qusb_phy_create_debugfs(qphy);
+#endif
 
 	return ret;
 }
@@ -1247,7 +1253,9 @@ static int qusb_phy_remove(struct platform_device *pdev)
 	usb_remove_phy(&qphy->phy);
 	qphy->cable_connected = false;
 	qusb_phy_set_suspend(&qphy->phy, true);
+#ifdef CONFIG_DEBUG_FS
 	debugfs_remove_recursive(qphy->root);
+#endif
 
 	return 0;
 }
