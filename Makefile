@@ -762,6 +762,10 @@ KBUILD_CFLAGS	+= -march=armv8.2-a+crypto+fp16+dotprod+rcpc
 KBUILD_CFLAGS	+= -mtune=cortex-a76
 # Enable hot cold split optimization
 KBUILD_CFLAGS   += -mllvm -hot-cold-split=true
+# Enable MLGO optimizations for register allocation
+KBUILD_CFLAGS   += -mllvm -regalloc-enable-advisor=release
+KBUILD_LDFLAGS  += -mllvm -regalloc-enable-advisor=release
+KBUILD_LDFLAGS  += -mllvm -enable-ml-inliner=release
 endif
 endif
 
