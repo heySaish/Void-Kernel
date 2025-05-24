@@ -2382,9 +2382,9 @@ static int npu_probe(struct platform_device *pdev)
 		NPU_ERR("unable to register npu sysfs nodes\n");
 		goto error_res_init;
 	}
-
+#ifdef CONFIG_DEBUG_FS
 	npu_debugfs_init(npu_dev);
-
+#endif
 	npu_dev->smmu_ctx.attach_cnt = 0;
 	npu_dev->smmu_ctx.mmu_mapping = arm_iommu_create_mapping(
 		pdev->dev.bus, DDR_MAPPED_START_ADDR, DDR_MAPPED_SIZE);
@@ -2452,7 +2452,9 @@ static int npu_remove(struct platform_device *pdev)
 
 	npu_dev = platform_get_drvdata(pdev);
 	npu_host_deinit(npu_dev);
+#ifdef CONFIG_DEBUG_FS
 	npu_debugfs_deinit(npu_dev);
+#endif
 	if (npu_dev->tcdev)
 		thermal_cooling_device_unregister(npu_dev->tcdev);
 	sysfs_remove_group(&npu_dev->device->kobj, &npu_fs_attr_group);
