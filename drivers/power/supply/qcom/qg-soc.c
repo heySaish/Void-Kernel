@@ -268,7 +268,7 @@ int qg_adjust_sys_soc(struct qpnp_qg *chip)
 		soc = FULL_SOC;
 	} else {
 		soc = DIV_ROUND_CLOSEST(chip->sys_soc, 100);
-		pr_err ("cc_soc = %d, batt_soc = %d, sys_soc = %d, soc = %d", chip->cc_soc, chip->batt_soc, chip->sys_soc, soc);
+		pr_debug ("cc_soc = %d, batt_soc = %d, sys_soc = %d, soc = %d", chip->cc_soc, chip->batt_soc, chip->sys_soc, soc);
 	}
 
 	qg_dbg(chip, QG_DEBUG_SOC, "sys_soc=%d adjusted sys_soc=%d\n",

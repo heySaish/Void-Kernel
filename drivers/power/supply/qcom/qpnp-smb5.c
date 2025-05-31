@@ -36,6 +36,11 @@
 #undef pr_debug
 #define dev_dbg dev_err
 #define pr_debug pr_err
+#else
+#undef dev_info
+#undef pr_info
+#define dev_info dev_dbg
+#define pr_info pr_debug
 #endif
 
 static struct smb_params smb5_pmi632_params = {
@@ -242,7 +247,7 @@ struct smb5 {
 	struct smb_dt_props	dt;
 };
 
-static int __debug_mask = PR_MISC | PR_PARALLEL | PR_OTG | PR_WLS | PR_OEM;
+static int __debug_mask;
 module_param_named(
 	debug_mask, __debug_mask, int, 0600
 );

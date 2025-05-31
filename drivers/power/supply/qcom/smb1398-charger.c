@@ -3,7 +3,7 @@
  * Copyright (c) 2019 The Linux Foundation. All rights reserved.
  * Copyright (C) 2020 XiaoMi, Inc.
  */
-#define DEBUG
+// #define DEBUG
 #define pr_fmt(fmt) "SMB1398: %s: " fmt, __func__
 
 #include <linux/device.h>

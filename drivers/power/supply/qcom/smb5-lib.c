@@ -34,6 +34,11 @@
 #undef pr_debug
 #define dev_dbg dev_err
 #define pr_debug pr_err
+#else
+#undef dev_info
+#undef pr_info
+#define dev_info dev_dbg
+#define pr_info pr_debug
 #endif
 /*part of charger mode function*/
 
@@ -2721,8 +2726,6 @@ int smblib_set_prop_input_suspend(struct smb_charger *chg,
 				  const union power_supply_propval *val)
 {
 	int rc;
-
-	dump_stack();
 
 	/* vote 0mA when suspended */
 	rc = vote(chg->usb_icl_votable, USER_VOTER, (bool)val->intval, 0);

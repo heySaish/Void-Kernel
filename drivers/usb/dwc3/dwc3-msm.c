@@ -56,10 +56,17 @@
 #include "dbm.h"
 #include "debug.h"
 #include "xhci.h"
+#ifdef CONFIG_DEBUG_USB
 #undef dev_dbg
 #undef pr_debug
 #define dev_dbg dev_err
 #define pr_debug pr_err
+#else
+#undef dev_info
+#undef pr_info
+#define dev_info dev_dbg
+#define pr_info pr_debug
+#endif
 #define SDP_CONNETION_CHECK_TIME 10000 /* in ms */
 
 /* time out to wait for USB cable status notification (in ms)*/
