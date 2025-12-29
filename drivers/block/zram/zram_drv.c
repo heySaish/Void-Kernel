@@ -1825,11 +1825,21 @@ static ssize_t disksize_store(struct device *dev,
 	u64 disksize;
 	struct zcomp *comp;
 	struct zram *zram = dev_to_zram(dev);
+	u64 total_ram_mb;
 	int err;
 
-	disksize = memparse(buf, NULL);
-	if (!disksize)
-		return -EINVAL;
+	total_ram_mb = (u64)totalram_pages * PAGE_SIZE / SZ_1M;
+
+	if (total_ram_mb > 6500) {
+		disksize = 4ULL * SZ_1G;
+		pr_info("zram: 8GB RAM detected (%llu MB), forcing 4GB\n", total_ram_mb);
+	} else if (total_ram_mb > 4500) {
+		disksize = 3ULL * SZ_1G;
+		pr_info("zram: 6GB RAM detected (%llu MB), forcing 3GB\n", total_ram_mb);
+	} else {
+		disksize = 2ULL * SZ_1G;
+		pr_info("zram: 4GB RAM detected (%llu MB), forcing 2GB\n", total_ram_mb);
+	}
 
 	down_write(&zram->init_lock);
 	if (init_done(zram)) {
