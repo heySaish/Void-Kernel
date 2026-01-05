@@ -154,10 +154,7 @@ static inline bool task_is_booster(struct task_struct *tsk)
 	char comm[sizeof(tsk->comm)];
 
 	get_task_comm(comm, tsk);
-	return strstr(comm, "init")  || strstr(comm, "NodeLooperThrea") ||
- 	       strstr(comm, "power") ||
- 	       strstr(comm, "perf")  ||
- 	       strstr(comm, "iop");
+	return strstr(comm, "init");
 }
 
 #endif /* _LINUX_BINFMTS_H */
