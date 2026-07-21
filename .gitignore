@@ -9,6 +9,7 @@
 #
 # Normal rules (sorted alphabetically)
 #
+/out/
 .*
 *.a
 *.bin
@@ -16,6 +17,8 @@
 *.c.[012]*.*
 *.dtb
 *.dtb.S
+*.dtbo
+*.img
 *.dwo
 *.elf
 *.gcno
@@ -38,7 +41,12 @@
 *.su
 *.symtypes
 *.tar
+*.tar.gz
 *.xz
+*.cmd
+*.zip
+.config
+.config.old
 Module.symvers
 modules.builtin
 
