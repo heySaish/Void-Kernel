@@ -74,7 +74,9 @@
 #define F12_DATA_15_WORKAROUND
 
 #define IGNORE_FN_INIT_FAILURE
+#ifdef CONFIG_FB
 #define FB_READY_RESET
+#endif
 #define FB_READY_WAIT_MS 100
 #define FB_READY_TIMEOUT_S 30
 #ifdef SYNA_TDDI
