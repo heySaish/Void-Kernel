@@ -22,7 +22,6 @@ jobs:
           cd clang
           curl -LO "https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman"
           bash antman -S
-          bash antman --patch=glibc
           cd ..
 
       - name: Build Kernel Image
