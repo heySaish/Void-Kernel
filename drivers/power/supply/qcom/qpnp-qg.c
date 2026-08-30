@@ -5271,9 +5271,11 @@ static int qpnp_qg_probe(struct platform_device *pdev)
 	memset(chip->ds_page0, 0, 16);
 	retry_batt_profile = 0;
 	//retry_battery_authentic_result = 0;
+#ifdef CONFIG_BATT_VERIFY_BY_DS28E16
 	retry_ds_romid = 0;
 	retry_ds_status = 0;
 	retry_ds_page0 = 0;
+#endif
 	chip->profile_judge_done = false;
 	}
 
