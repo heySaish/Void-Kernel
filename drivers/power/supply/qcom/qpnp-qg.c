@@ -2183,6 +2183,7 @@ static int qg_psy_get_property(struct power_supply *psy,
 	int rc = 0;
 	int64_t temp = 0;
 	union power_supply_propval b_val = {0,};
+#ifdef CONFIG_BATT_VERIFY_BY_DS28E16
 	if (board_33w_supported) {
 	if (chip->max_verify_psy == NULL)
 		chip->max_verify_psy = power_supply_get_by_name("batt_verify");
@@ -2197,9 +2198,11 @@ static int qg_psy_get_property(struct power_supply *psy,
 		}
 	}
 	}
+#endif
 	pval->intval = 0;
 
 	switch (psp) {
+#ifdef CONFIG_BATT_VERIFY_BY_DS28E16
 	case POWER_SUPPLY_PROP_AUTHENTIC:
 		if (board_33w_supported) {
 		rc = power_supply_get_property(chip->max_verify_psy,
@@ -2241,6 +2244,11 @@ static int qg_psy_get_property(struct power_supply *psy,
 		pval->intval = 2;
 		}
 		break;
+#else
+	case POWER_SUPPLY_PROP_CHIP_OK:
+		pval->intval = 2;
+		break;
+#endif
 	case POWER_SUPPLY_PROP_CAPACITY:
 		rc = qg_get_battery_capacity(chip, &pval->intval);
 		/* Using smooth battery capacity */
@@ -2413,9 +2421,11 @@ static int qg_property_is_writeable(struct power_supply *psy,
 
 static enum power_supply_property qg_psy_props[] = {
 	POWER_SUPPLY_PROP_AUTHENTIC,
+#ifdef CONFIG_BATT_VERIFY_BY_DS28E16
 	POWER_SUPPLY_PROP_ROMID,
 	POWER_SUPPLY_PROP_DS_STATUS,
 	POWER_SUPPLY_PROP_PAGE0_DATA,
+#endif
 	POWER_SUPPLY_PROP_CHIP_OK,
 	POWER_SUPPLY_PROP_CAPACITY,
 	POWER_SUPPLY_PROP_CAPACITY_RAW,
@@ -2821,6 +2831,7 @@ static void battery_authentic_work(struct work_struct *work)
 }
 */
 
+#ifdef CONFIG_BATT_VERIFY_BY_DS28E16
 static int ds_romid_period_ms = 1000;
 int retry_ds_romid;
 #define DS_ROMID_COUNT_MAX 5
@@ -2926,6 +2937,7 @@ static void ds_page0_work(struct work_struct *work)
 			pval.arrayval[12], pval.arrayval[13], pval.arrayval[14], pval.arrayval[15]);
 	}
 }
+#endif
 
 static int profile_load_period_ms = 1000;
 int retry_batt_profile;
@@ -3370,7 +3382,7 @@ static int qg_load_battery_profile(struct qpnp_qg *chip)
 					chip->batt_age_level, avail_age_level);
 			chip->batt_age_level = avail_age_level;
 		}
-	} else {
+#ifdef CONFIG_BATT_VERIFY_BY_DS28E16
 		if (board_33w_supported) {
 		if (chip->max_verify_psy != NULL) {
 			rc = power_supply_get_property(chip->max_verify_psy,
@@ -3413,7 +3425,10 @@ static int qg_load_battery_profile(struct qpnp_qg *chip)
 		profile_node = of_batterydata_get_best_profile(chip->batt_node,
 				chip->batt_id_ohm / 1000, NULL);
 		}
-	}
+#else
+		profile_node = of_batterydata_get_best_profile(chip->batt_node,
+				chip->batt_id_ohm / 1000, NULL);
+#endif
 
 	if (IS_ERR(profile_node)) {
 		rc = PTR_ERR(profile_node);
@@ -5296,9 +5311,11 @@ static int qpnp_qg_probe(struct platform_device *pdev)
 	if (board_33w_supported) {
 	INIT_DELAYED_WORK(&chip->profile_load_work, profile_load_work);
 	//INIT_DELAYED_WORK(&chip->battery_authentic_work, battery_authentic_work);
+#ifdef CONFIG_BATT_VERIFY_BY_DS28E16
 	INIT_DELAYED_WORK(&chip->ds_romid_work, ds_romid_work);
 	INIT_DELAYED_WORK(&chip->ds_status_work, ds_status_work);
 	INIT_DELAYED_WORK(&chip->ds_page0_work, ds_page0_work);
+#endif
 	}
 	mutex_init(&chip->bus_lock);
 	mutex_init(&chip->soc_lock);
