@@ -3382,6 +3382,7 @@ static int qg_load_battery_profile(struct qpnp_qg *chip)
 					chip->batt_age_level, avail_age_level);
 			chip->batt_age_level = avail_age_level;
 		}
+	} else {
 #ifdef CONFIG_BATT_VERIFY_BY_DS28E16
 		if (board_33w_supported) {
 		if (chip->max_verify_psy != NULL) {
@@ -3429,6 +3430,7 @@ static int qg_load_battery_profile(struct qpnp_qg *chip)
 		profile_node = of_batterydata_get_best_profile(chip->batt_node,
 				chip->batt_id_ohm / 1000, NULL);
 #endif
+	}
 
 	if (IS_ERR(profile_node)) {
 		rc = PTR_ERR(profile_node);
