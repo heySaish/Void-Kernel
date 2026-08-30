@@ -1,0 +1,74 @@
+name: Build Void Kernel (Neutron Clang)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Compile Void Kernel
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Kernel Source
+        uses: actions/checkout@v4
+
+      - name: Setup Build Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev libncurses5-dev libssl-dev libxml2-utils xsltproc bc rsync libelf-dev
+
+      - name: Setup Neutron Clang
+        run: |
+          mkdir -p clang
+          cd clang
+          curl -LO "https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman"
+          bash antman -S
+          bash antman --patch=glibc
+          cd ..
+
+      - name: Build Kernel Image
+        run: |
+          export PATH="$(pwd)/clang/bin:$PATH"
+          export ARCH=arm64
+          export SUBARCH=arm64
+          export CC=clang
+
+          # Defconfig load (SM6250 / Atoll)
+          if [ -f arch/arm64/configs/vendor/atoll-perf_defconfig ]; then
+            make O=out vendor/atoll-perf_defconfig
+          elif [ -f arch/arm64/configs/atoll-perf_defconfig ]; then
+            make O=out atoll-perf_defconfig
+          elif [ -f arch/arm64/configs/vendor/sm6250-perf_defconfig ]; then
+            make O=out vendor/sm6250-perf_defconfig
+          else
+            make O=out sm6250-perf_defconfig
+          fi
+
+          # Compile Kernel & DTBs
+          make -j$(nproc --all) O=out \
+            ARCH=arm64 \
+            CC=clang \
+            CLANG_TRIPLE=aarch64-linux-gnu- \
+            CROSS_COMPILE=aarch64-linux-gnu- \
+            CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
+            LLVM=1 \
+            LLVM_IAS=1
+
+      - name: Package with AnyKernel3
+        run: |
+          git clone https://github.com/osm0sis/AnyKernel3 --depth=1 AK3
+          if [ -f out/arch/arm64/boot/Image.gz-dtb ]; then
+            cp out/arch/arm64/boot/Image.gz-dtb AK3/
+          elif [ -f out/arch/arm64/boot/Image.gz ]; then
+            cp out/arch/arm64/boot/Image.gz AK3/
+          fi
+          if [ -f out/arch/arm64/boot/dtbo.img ]; then
+            cp out/arch/arm64/boot/dtbo.img AK3/
+          fi
+          cd AK3
+          zip -r9 ../Void-Kernel-Clean.zip * -x .git README.md
+
+      - name: Upload Kernel Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Void-Kernel-Clean-Build
+          path: Void-Kernel-Clean.zip
