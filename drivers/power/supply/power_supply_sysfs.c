@@ -162,6 +162,7 @@ static ssize_t power_supply_show_property(struct device *dev,
 			       power_supply_health_text[value.intval]);
 	else if (off >= POWER_SUPPLY_PROP_MODEL_NAME)
 		return sprintf(buf, "%s\n", value.strval);
+#ifdef CONFIG_BATT_VERIFY_BY_DS28E16
 	else if (board_33w_supported) {
 	if ((off == POWER_SUPPLY_PROP_ROMID) || (off == POWER_SUPPLY_PROP_DS_STATUS))
 		return scnprintf(buf, PAGE_SIZE, "%02x,%02x,%02x,%02x,%02x,%02x,%02x,%02x\n",
@@ -178,6 +179,7 @@ static ssize_t power_supply_show_property(struct device *dev,
 	else if (off == POWER_SUPPLY_PROP_VERIFY_MODEL_NAME)
 		return sprintf(buf, "%s\n", value.strval);
 	}
+#endif
 
 	if (off == POWER_SUPPLY_PROP_CHARGE_COUNTER_EXT)
 		return sprintf(buf, "%lld\n", value.int64val);
