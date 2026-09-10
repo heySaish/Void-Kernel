@@ -24,6 +24,10 @@ jobs:
           bash antman -S
           cd ..
 
+      - name: Setup KernelSU-Next
+        run: |
+          curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s next
+
       - name: Build Kernel Image
         run: |
           export PATH="$(pwd)/clang/bin:$PATH"
