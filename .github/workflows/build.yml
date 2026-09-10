@@ -30,6 +30,8 @@ jobs:
           export ARCH=arm64
           export SUBARCH=arm64
           export CC=clang
+          export KBUILD_BUILD_USER=Saish
+          export KBUILD_BUILD_HOST=VoidOS
 
           # Defconfig load (Xiaomi Miatoll)
           if [ -f arch/arm64/configs/vendor/xiaomi/miatoll_defconfig ]; then
@@ -50,7 +52,9 @@ jobs:
             CROSS_COMPILE=aarch64-linux-gnu- \
             CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
             LLVM=1 \
-            LLVM_IAS=1
+            LLVM_IAS=1 \
+            KBUILD_BUILD_USER=Saish \
+            KBUILD_BUILD_HOST=VoidOS
 
       - name: Package with AnyKernel3
         run: |
