@@ -31,15 +31,15 @@ jobs:
           export SUBARCH=arm64
           export CC=clang
 
-          # Defconfig load (SM6250 / Atoll)
-          if [ -f arch/arm64/configs/vendor/atoll-perf_defconfig ]; then
+          # Defconfig load (Xiaomi Miatoll)
+          if [ -f arch/arm64/configs/vendor/xiaomi/miatoll_defconfig ]; then
+            make O=out vendor/xiaomi/miatoll_defconfig
+          elif [ -f arch/arm64/configs/stock_defconfig ]; then
+            make O=out stock_defconfig
+          elif [ -f arch/arm64/configs/vendor/atoll-perf_defconfig ]; then
             make O=out vendor/atoll-perf_defconfig
-          elif [ -f arch/arm64/configs/atoll-perf_defconfig ]; then
-            make O=out atoll-perf_defconfig
-          elif [ -f arch/arm64/configs/vendor/sm6250-perf_defconfig ]; then
-            make O=out vendor/sm6250-perf_defconfig
           else
-            make O=out sm6250-perf_defconfig
+            make O=out defconfig
           fi
 
           # Compile Kernel & DTBs
@@ -60,9 +60,7 @@ jobs:
           elif [ -f out/arch/arm64/boot/Image.gz ]; then
             cp out/arch/arm64/boot/Image.gz AK3/
           fi
-          if [ -f out/arch/arm64/boot/dtbo.img ]; then
-            cp out/arch/arm64/boot/dtbo.img AK3/
-          fi
+          cp anykernel.sh AK3/
           cd AK3
           zip -r9 ../Void-Kernel-Clean.zip * -x .git README.md
 
