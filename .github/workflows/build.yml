@@ -27,6 +27,7 @@ jobs:
       - name: Setup KernelSU-Next
         run: |
           curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s next
+          sed -i 's/depends on KPROBES && EXT4_FS/depends on EXT4_FS/g' KernelSU-Next/kernel/Kconfig
 
       - name: Build Kernel Image
         run: |
