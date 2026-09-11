@@ -34,6 +34,9 @@ jobs:
           sed -i 's/#define ksu_close_fd ksys_close/#define ksu_close_fd sys_close/g' KernelSU-Next/kernel/include/util.h
           sed -i 's/#include "linux\/compiler.h"/#include "linux\/compiler.h"\n#include <linux\/uaccess.h>/g' KernelSU-Next/kernel/hook/syscall_event_bridge.c
           sed -i 's/register_trace_prio_sys_enter(ksu_sys_enter_handler, NULL, INT_MIN)/register_trace_sys_enter(ksu_sys_enter_handler, NULL)/g' KernelSU-Next/kernel/hook/syscall_hook_manager.c
+          sed -i 's/__pte_to_phys/pte_to_phys/g' KernelSU-Next/kernel/hook/arm64/patch_memory.c
+          sed -i 's/__flush_icache_range/flush_icache_range/g' KernelSU-Next/kernel/hook/arm64/patch_memory.c
+          sed -i 's/copy_to_kernel_nofault/probe_kernel_write/g' KernelSU-Next/kernel/hook/arm64/patch_memory.c
 
       - name: Build Kernel Image
         run: |
