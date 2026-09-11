@@ -27,6 +27,8 @@ jobs:
       - name: Setup KernelSU-Next (Legacy 4.14)
         run: |
           curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s v3.2.0-legacy
+          sed -i 's/ccflags-y += -DKSU_VERSION=$(KSU_VERSION)/ccflags-y += -DKSU_VERSION=33214/g' KernelSU-Next/kernel/Kbuild
+          sed -i 's/ccflags-y += -DKSU_VERSION_TAG=\\"$(KSU_VERSION_TAG)\\"/ccflags-y += -DKSU_VERSION_TAG=\\"v3.3.0\\"/g' KernelSU-Next/kernel/Kbuild
 
       - name: Build Kernel Image
         run: |
