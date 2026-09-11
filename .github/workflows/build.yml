@@ -32,6 +32,8 @@ jobs:
           sed -i 's/typedef sys_call_ptr_t syscall_fn_t;/typedef long (*syscall_fn_t)(const struct pt_regs *);/g' KernelSU-Next/kernel/hook/syscall_hook.h
           sed -i 's/#include <linux\/pgtable.h>/#include <asm\/pgtable.h>/g' KernelSU-Next/kernel/feature/sucompat.c
           sed -i 's/#define ksu_close_fd ksys_close/#define ksu_close_fd sys_close/g' KernelSU-Next/kernel/include/util.h
+          sed -i 's/#include "linux\/compiler.h"/#include "linux\/compiler.h"\n#include <linux\/uaccess.h>/g' KernelSU-Next/kernel/hook/syscall_event_bridge.c
+          sed -i 's/register_trace_prio_sys_enter(ksu_sys_enter_handler, NULL, INT_MIN)/register_trace_sys_enter(ksu_sys_enter_handler, NULL)/g' KernelSU-Next/kernel/hook/syscall_hook_manager.c
 
       - name: Build Kernel Image
         run: |
