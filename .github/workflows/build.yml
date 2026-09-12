@@ -24,9 +24,9 @@ jobs:
           bash antman -S
           cd ..
 
-      - name: Setup Official KernelSU
+      - name: Setup Official KernelSU (v0.9.5 - 4.14 Native)
         run: |
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -
+          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.9.5
 
       - name: Build Kernel Image
         run: |
