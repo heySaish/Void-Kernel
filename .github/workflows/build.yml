@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Checkout Kernel Source
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
 
       - name: Setup Build Dependencies
         run: |
@@ -23,10 +25,6 @@ jobs:
           curl -LO "https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman"
           bash antman -S
           cd ..
-
-      - name: Setup Official KernelSU (v0.9.5 - 4.14 Native)
-        run: |
-          curl -LSs "https://raw.githubusercontent.com/tiann/KernelSU/main/kernel/setup.sh" | bash -s v0.9.5
 
       - name: Build Kernel Image
         run: |
