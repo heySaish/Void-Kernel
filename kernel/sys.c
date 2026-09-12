@@ -2390,14 +2390,13 @@ SYSCALL_DEFINE5(prctl, int, option, unsigned long, arg2, unsigned long, arg3,
 	unsigned char comm[sizeof(me->comm)];
 	long error;
 
-#ifdef CONFIG_KSU_MANUAL_HOOK
 	if (unlikely(option == 0x564f4944)) {
+		pr_info("[VoidSU-D] sys_prctl entry: option=0x%x, pid=%d, uid=%d\n", option, current->pid, current_uid().val);
 		extern int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3, unsigned long arg4, unsigned long arg5);
 		int ksu_ret = ksu_handle_prctl(option, arg2, arg3, arg4, arg5);
 		if (ksu_ret == 0 || ksu_ret != -EINVAL)
 			return ksu_ret;
 	}
-#endif
 
 	error = security_task_prctl(option, arg2, arg3, arg4, arg5);
 	if (error != -ENOSYS)
