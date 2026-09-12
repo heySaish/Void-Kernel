@@ -3,7 +3,7 @@
 [![Build Void Kernel](https://github.com/heySaish/Void-Kernel/actions/workflows/build.yml/badge.svg)](https://github.com/heySaish/Void-Kernel/actions/workflows/build.yml)
 ![Kernel Version](https://img.shields.io/badge/Kernel-4.14.357-blue.svg)
 ![Toolchain](https://img.shields.io/badge/Toolchain-Neutron--Clang-purple.svg)
-![Root](https://img.shields.io/badge/Root-KernelSU--Next-success.svg)
+![Root](https://img.shields.io/badge/Root-Official--KernelSU-success.svg)
 ![Architecture](https://img.shields.io/badge/Arch-ARM64--v8a-orange.svg)
 
 A high-performance, clean, and battery-optimized custom Linux Kernel designed for the **Xiaomi Miatoll** unified family.
@@ -21,7 +21,7 @@ A high-performance, clean, and battery-optimized custom Linux Kernel designed fo
 
 ## 🔥 Features & Highlights
 
-- ⚡ **KernelSU-Next Integrated:** Built-in next-generation kernel root engine (`v3.3.0`) with manual hooks.
+- ⚡ **Official KernelSU Integrated:** Built-in official kernel root engine with manual hooks.
 - 🚀 **Neutron Clang Compiler:** Compiled using the latest Neutron LLVM toolchain for maximum performance & code optimizations.
 - 🔋 **Battery & Thermal Balance:** Optimized power consumption with smooth daily responsiveness.
 - 🎮 **Gaming Stability:** Reduced frame drops, lower latency, and enhanced memory throughput.
