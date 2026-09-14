@@ -24,9 +24,9 @@ jobs:
           bash antman -S
           cd ..
 
-      - name: Setup VoidSU (Legacy 4.14)
+      - name: Setup VoidSU Driver
         run: |
-          curl -LSs "https://raw.githubusercontent.com/heySaish/VoidSU/legacy/kernel/setup.sh" | bash -s legacy
+          curl -LSs "https://raw.githubusercontent.com/heySaish/VoidSU/main/kernel/setup.sh" | bash -s main
 
       - name: Build Kernel Image
         run: |
