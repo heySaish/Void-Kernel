@@ -24,9 +24,9 @@ jobs:
           bash antman -S
           cd ..
 
-      - name: Setup KernelSU-Next (Legacy 4.14)
+      - name: Setup VoidSU (Legacy 4.14)
         run: |
-          curl -LSs "https://raw.githubusercontent.com/KernelSU-Next/KernelSU-Next/next/kernel/setup.sh" | bash -s v3.2.0-legacy
+          curl -LSs "https://raw.githubusercontent.com/heySaish/VoidSU/legacy/kernel/setup.sh" | bash -s legacy
 
       - name: Build Kernel Image
         run: |
