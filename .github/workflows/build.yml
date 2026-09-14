@@ -34,7 +34,7 @@ jobs:
           export ARCH=arm64
           export SUBARCH=arm64
           export CC=clang
-          export KBUILD_BUILD_USER=void
+          export KBUILD_BUILD_USER=saish
           export KBUILD_BUILD_HOST=void
 
           # Defconfig load (Xiaomi Miatoll)
@@ -57,7 +57,7 @@ jobs:
             CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
             LLVM=1 \
             LLVM_IAS=1 \
-            KBUILD_BUILD_USER=void \
+            KBUILD_BUILD_USER=saish \
             KBUILD_BUILD_HOST=void
 
       - name: Package with AnyKernel3
