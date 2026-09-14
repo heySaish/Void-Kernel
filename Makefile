@@ -1,7 +1,7 @@
 # SPDX-License-Identifier: GPL-2.0
-VERSION = 5
-PATCHLEVEL = 15
-SUBLEVEL = 178
+VERSION = 4
+PATCHLEVEL = 14
+SUBLEVEL = 357
 EXTRAVERSION =
 NAME = Petit Gorille
 
@@ -1407,11 +1407,7 @@ endif
 # needs to be updated, so this check is forced on all builds
 
 uts_len := 64
-ifneq (,$(BUILD_NUMBER))
-	UTS_RELEASE=$(KERNELRELEASE)-ab$(BUILD_NUMBER)
-else
-	UTS_RELEASE=$(KERNELRELEASE)
-endif
+UTS_RELEASE = 5.15.178
 define filechk_utsrelease.h
 	if [ `echo -n "$(UTS_RELEASE)" | wc -c ` -gt $(uts_len) ]; then \
 		echo '"$(UTS_RELEASE)" exceeds $(uts_len) characters' >&2;    \
