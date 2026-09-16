@@ -29,6 +29,17 @@ PATCH_VBMETA_FLAG=auto;
 # import functions/variables and setup patching - see for reference (DO NOT REMOVE)
 . tools/ak3-core.sh;
 
+# Banner
+ui_print " ";
+ui_print " __     __    _     _   _  __                    _   ";
+ui_print " \\ \\   / /__ (_) __| | | |/ /___ _ __ _ __   ___| |  ";
+ui_print "  \\ \\ / / _ \\| |/ _\` | | ' // _ \\ '__| '_ \\ / _ \\ |  ";
+ui_print "   \\ V / (_) | | (_| | | . \\  __/ |  | | | |  __/ |  ";
+ui_print "    \\_/ \\___/|_|\\__,_| |_|\\_\\___|_|  |_| |_|\\___|_|  ";
+ui_print " ";
+ui_print "       --- Void Kernel by heySaish ---";
+ui_print " ";
+
 # boot install
 dump_boot;
 
