@@ -27,6 +27,11 @@ static inline void escape_to_root(void) {
 	escape_with_root_profile();
 }
 
+bool ksu_devpts_hook __read_mostly = false;
+int ksu_handle_devpts(struct inode *inode) {
+	return 0;
+}
+
 #define FIFO_SIZE 1024
 #define MAX_DRV_NAME 255
 
