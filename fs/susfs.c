@@ -1,3 +1,4 @@
+#include <linux/susfs.h>
 #include <linux/version.h>
 #include <linux/cred.h>
 #include <linux/fs.h>
