@@ -686,6 +686,13 @@ config TCP_CONG_BBR
 	bufferbloat, policers, or AQM schemes that do not provide a delay
 	signal. It requires the fq ("Fair Queue") pacing packet scheduler.
 
+config TCP_CONG_BBRPLUS
+	tristate "BBRplus TCP (Community Maintained)"
+	default y
+	---help---
+	  BBRplus is a community-tuned variant of BBR designed for high-throughput,
+	  ultra-low latency, and aggressive packet-loss resilience over Wi-Fi/4G/5G networks.
+
 choice
 	prompt "Default TCP congestion control"
 	default DEFAULT_CUBIC
@@ -720,8 +727,8 @@ choice
 	config DEFAULT_CDG
 		bool "CDG" if TCP_CONG_CDG=y
 
-	config DEFAULT_BBR
-		bool "BBR" if TCP_CONG_BBR=y
+	config DEFAULT_BBRPLUS
+		bool "BBRplus" if TCP_CONG_BBRPLUS=y
 
 	config DEFAULT_RENO
 		bool "Reno"
