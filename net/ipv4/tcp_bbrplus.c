@@ -70,7 +70,7 @@ static void bbrplus_init(struct sock *sk)
 	struct tcp_sock *tp = tcp_sk(sk);
 	struct bbrplus *bbr = inet_csk_ca(sk);
 
-	bbr->min_rtt_us = tcp_min_rtt(tp);
+	bbr->min_rtt_us = minmax_get(&tp->rtt_min);
 	bbr->min_rtt_stamp = tcp_time_stamp;
 	bbr->mode = BBRPLUS_STARTUP;
 	bbr->prev_ca_state = TCP_CA_Open;
