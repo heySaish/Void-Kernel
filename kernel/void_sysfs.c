@@ -51,11 +51,19 @@ static ssize_t health_show(struct kobject *kobj, struct kobj_attribute *attr, ch
         "------------------\n"
         "Driver:       OK\n"
         "KernelSU:     OK\n"
-        "Scheduler:    OK\n"
+        "Scheduler:    OK (CFS 5ms)\n"
+        "TCP:          BBRplus\n"
+        "MGLRU:        Active (0x0003)\n"
         "Thermal:      OK\n"
         "Memory:       OK\n"
         "Uptime:       %luh %lum\n",
         hours, mins);
+}
+
+static ssize_t features_show(struct kobject *kobj, struct kobj_attribute *attr, char *buf)
+{
+    return sprintf(buf,
+        "[MGLRU_ACTIVE] [BBRPLUS_TCP] [CFS_TUNED_5MS] [POWERSAVE_GOV] [VOID_SU] [NEUTRON_CLANG_LTO]\n");
 }
 
 static struct kobj_attribute version_attribute =
@@ -69,6 +77,9 @@ static struct kobj_attribute compiler_attribute =
 
 static struct kobj_attribute health_attribute =
     __ATTR(health, 0444, health_show, NULL);
+
+static struct kobj_attribute features_attribute =
+    __ATTR(features, 0444, features_show, NULL);
 
 static int __init void_sysfs_init(void)
 {
@@ -87,6 +98,7 @@ static int __init void_sysfs_init(void)
     sysfs_create_file(void_kobj, &banner_attribute.attr);
     sysfs_create_file(void_kobj, &compiler_attribute.attr);
     sysfs_create_file(void_kobj, &health_attribute.attr);
+    sysfs_create_file(void_kobj, &features_attribute.attr);
 
     return 0;
 }
