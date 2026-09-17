@@ -13,6 +13,8 @@
 #define BBRPLUS_SCALE 256
 #define BBRPLUS_UNIT BBRPLUS_SCALE
 
+static const int bbrplus_bw_rtts = 10;
+
 /* Dynamic Pacing Gain cycles for BBRplus (8 phases) */
 static const int bbrplus_pacing_gain[] = {
 	BBRPLUS_UNIT * 5 / 4,
@@ -130,7 +132,7 @@ static void bbrplus_main(struct sock *sk, const struct rate_sample *rs)
 		minmax_running_max(&bbr->bw, bbrplus_bw_rtts, bbr->rtt_cnt, bw);
 
 	bbrplus_set_pacing_rate(sk, bbrplus_bw(sk), bbr->pacing_gain);
-	bbrplus_set_cwnd(sk, rs, rs->acked_sacked, bbrplus_bw(sk), bbr->cwnd_gain);
+	bbrplus_set_cwnd(sk, rs, rs->acked_sacked, (u32)bbrplus_bw(sk), bbr->cwnd_gain);
 }
 
 static u32 bbrplus_sndbuf_expand(struct sock *sk)
