@@ -1,6 +1,10 @@
 name: Build Void Kernel (Neutron Clang)
 
 on:
+  push:
+    branches:
+      - test-voidfs
+      - main
   workflow_dispatch:
 
 jobs:
