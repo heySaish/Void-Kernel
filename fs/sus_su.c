@@ -16,6 +16,17 @@ extern bool is_log_enable __read_mostly;
 #define SUSFS_LOGE(fmt, ...)
 #endif
 
+extern bool __ksu_is_allow_uid_for_current(uid_t uid);
+extern int escape_with_root_profile(void);
+
+static inline bool susfs_is_allow_su(void) {
+	return __ksu_is_allow_uid_for_current(current_uid().val);
+}
+
+static inline void escape_to_root(void) {
+	escape_with_root_profile();
+}
+
 #define FIFO_SIZE 1024
 #define MAX_DRV_NAME 255
 
