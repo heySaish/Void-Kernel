@@ -17,8 +17,10 @@
 #include <linux/statfs.h>
 #include "internal.h"
 #include "mount.h"
-#include <linux/susfs.h>
-#include "../drivers/kernelsu/core_hook.h"
+#ifdef CONFIG_KSU_SUSFS_SUS_SU
+extern void ksu_susfs_enable_sus_su(void);
+extern void ksu_susfs_disable_sus_su(void);
+#endif
 #ifdef CONFIG_KSU_SUSFS_SUS_SU
 #include <linux/sus_su.h>
 #endif
