@@ -13,7 +13,7 @@
 #include <linux/writeback.h>
 #include <linux/uio.h>
 #include <linux/random.h>
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 16, 0)
+#if __has_include(<linux/iversion.h>)
 #include <linux/iversion.h>
 #endif
 #include "exfat_raw.h"

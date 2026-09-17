@@ -4,7 +4,7 @@
  */
 
 #include <linux/version.h>
-#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 16, 0)
+#if __has_include(<linux/iversion.h>)
 #include <linux/iversion.h>
 #endif
 #include <linux/namei.h>
