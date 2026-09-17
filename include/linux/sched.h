@@ -1378,6 +1378,10 @@ struct task_struct {
 	/* Used by LSM modules for access restriction: */
 	void				*security;
 #endif
+#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+	u64 android_kabi_reserved1;
+	u64 android_kabi_reserved2;
+#endif
 #ifdef CONFIG_ANDROID_SIMPLE_LMK
 	struct task_struct		*simple_lmk_next;
 #endif
