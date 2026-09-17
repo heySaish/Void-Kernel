@@ -138,5 +138,3 @@ kernel/configs/android-*.cfg
 #Ignoring Android.bp link file
 #
 Android.bp
-KernelSU-Next
-drivers/kernelsu
