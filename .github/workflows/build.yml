@@ -28,10 +28,6 @@ jobs:
           bash antman -S
           cd ..
 
-      - name: Setup VoidSU Driver
-        run: |
-          curl -LSs "https://raw.githubusercontent.com/heySaish/VoidSU/main/kernel/setup.sh" | bash -s main
-
       - name: Build Kernel Image
         run: |
           export PATH="$(pwd)/clang/bin:$PATH"
