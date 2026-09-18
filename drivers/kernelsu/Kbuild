@@ -57,6 +57,34 @@ endif
 ccflags-y += -I$(srctree)/security/selinux -I$(srctree)/security/selinux/include
 ccflags-y += -I$(objtree)/security/selinux -include $(srctree)/include/uapi/asm-generic/errno.h
 
+ifeq ($(CONFIG_KSU_SUSFS),y)
+ccflags-y += -DKSU_SUSFS -DCONFIG_KSU_SUSFS
+endif
+ifeq ($(CONFIG_KSU_SUSFS_SUS_PATH),y)
+ccflags-y += -DKSU_SUSFS_SUS_PATH -DCONFIG_KSU_SUSFS_SUS_PATH
+endif
+ifeq ($(CONFIG_KSU_SUSFS_SUS_MOUNT),y)
+ccflags-y += -DKSU_SUSFS_SUS_MOUNT -DCONFIG_KSU_SUSFS_SUS_MOUNT
+endif
+ifeq ($(CONFIG_KSU_SUSFS_SUS_KSTAT),y)
+ccflags-y += -DKSU_SUSFS_SUS_KSTAT -DCONFIG_KSU_SUSFS_SUS_KSTAT
+endif
+ifeq ($(CONFIG_KSU_SUSFS_SUS_OVERLAYFS),y)
+ccflags-y += -DKSU_SUSFS_SUS_OVERLAYFS -DCONFIG_KSU_SUSFS_SUS_OVERLAYFS
+endif
+ifeq ($(CONFIG_KSU_SUSFS_TRY_UMOUNT),y)
+ccflags-y += -DKSU_SUSFS_TRY_UMOUNT -DCONFIG_KSU_SUSFS_TRY_UMOUNT
+endif
+ifeq ($(CONFIG_KSU_SUSFS_SPOOF_UNAME),y)
+ccflags-y += -DKSU_SUSFS_SPOOF_UNAME -DCONFIG_KSU_SUSFS_SPOOF_UNAME
+endif
+ifeq ($(CONFIG_KSU_SUSFS_ENABLE_LOG),y)
+ccflags-y += -DKSU_SUSFS_ENABLE_LOG -DCONFIG_KSU_SUSFS_ENABLE_LOG
+endif
+ifeq ($(CONFIG_KSU_SUSFS_SUS_SU),y)
+ccflags-y += -DKSU_SUSFS_SUS_SU -DCONFIG_KSU_SUSFS_SUS_SU
+endif
+
 ifeq ($(filter /%,$(src)),)
 KSU_KERNEL_DIR := $(srctree)/$(src)
 else

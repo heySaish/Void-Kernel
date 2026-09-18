@@ -497,6 +497,7 @@ void susfs_init(void) {
 #endif
 	SUSFS_LOGI("susfs is initialized!\n");
 }
+late_initcall(susfs_init);
 
 /* No module exit is needed becuase it should never be a loadable kernel module */
 //void __init susfs_exit(void)

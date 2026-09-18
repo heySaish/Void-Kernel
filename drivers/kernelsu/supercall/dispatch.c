@@ -790,9 +790,120 @@ static int do_disable_escape_to_root(void __user *arg)
     return 0;
 }
 
+#ifdef CONFIG_KSU_SUSFS
+#include <linux/susfs.h>
+
+static int do_susfs_add_sus_path(void __user *arg)
+{
+#ifdef CONFIG_KSU_SUSFS_SUS_PATH
+	return susfs_add_sus_path((struct st_susfs_sus_path __user *)arg);
+#else
+	return -ENOTTY;
+#endif
+}
+
+static int do_susfs_add_sus_mount(void __user *arg)
+{
+#ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
+	return susfs_add_sus_mount((struct st_susfs_sus_mount __user *)arg);
+#else
+	return -ENOTTY;
+#endif
+}
+
+static int do_susfs_add_sus_kstat(void __user *arg)
+{
+#ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+	return susfs_add_sus_kstat((struct st_susfs_sus_kstat __user *)arg);
+#else
+	return -ENOTTY;
+#endif
+}
+
+static int do_susfs_update_sus_kstat(void __user *arg)
+{
+#ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
+	return susfs_update_sus_kstat((struct st_susfs_sus_kstat __user *)arg);
+#else
+	return -ENOTTY;
+#endif
+}
+
+static int do_susfs_add_try_umount(void __user *arg)
+{
+#ifdef CONFIG_KSU_SUSFS_TRY_UMOUNT
+	return susfs_add_try_umount((struct st_susfs_try_umount __user *)arg);
+#else
+	return -ENOTTY;
+#endif
+}
+
+static int do_susfs_set_uname(void __user *arg)
+{
+#ifdef CONFIG_KSU_SUSFS_SPOOF_UNAME
+	return susfs_set_uname((struct st_susfs_uname __user *)arg);
+#else
+	return -ENOTTY;
+#endif
+}
+
+static int do_susfs_sus_su(void __user *arg)
+{
+#ifdef CONFIG_KSU_SUSFS_SUS_SU
+	return susfs_sus_su((struct st_sus_su __user *)arg);
+#else
+	return -ENOTTY;
+#endif
+}
+#endif
+
 // IOCTL handlers mapping table
 // clang-format off
 static const struct ksu_ioctl_cmd_map ksu_ioctl_handlers[] = {
+#ifdef CONFIG_KSU_SUSFS
+    {
+        .cmd = CMD_SUSFS_ADD_SUS_PATH,
+        .name = "SUSFS_ADD_SUS_PATH",
+        .handler = do_susfs_add_sus_path,
+        .perm_check = only_root
+    },
+    {
+        .cmd = CMD_SUSFS_ADD_SUS_MOUNT,
+        .name = "SUSFS_ADD_SUS_MOUNT",
+        .handler = do_susfs_add_sus_mount,
+        .perm_check = only_root
+    },
+    {
+        .cmd = CMD_SUSFS_ADD_SUS_KSTAT,
+        .name = "SUSFS_ADD_SUS_KSTAT",
+        .handler = do_susfs_add_sus_kstat,
+        .perm_check = only_root
+    },
+    {
+        .cmd = CMD_SUSFS_UPDATE_SUS_KSTAT,
+        .name = "SUSFS_UPDATE_SUS_KSTAT",
+        .handler = do_susfs_update_sus_kstat,
+        .perm_check = only_root
+    },
+    {
+        .cmd = CMD_SUSFS_ADD_TRY_UMOUNT,
+        .name = "SUSFS_ADD_TRY_UMOUNT",
+        .handler = do_susfs_add_try_umount,
+        .perm_check = only_root
+    },
+    {
+        .cmd = CMD_SUSFS_SET_UNAME,
+        .name = "SUSFS_SET_UNAME",
+        .handler = do_susfs_set_uname,
+        .perm_check = only_root
+    },
+    {
+        .cmd = CMD_SUSFS_SUS_SU,
+        .name = "SUSFS_SUS_SU",
+        .handler = do_susfs_sus_su,
+        .perm_check = only_root
+    },
+#endif
     {
         .cmd = KSU_IOCTL_GRANT_ROOT,
         .name = "GRANT_ROOT",
