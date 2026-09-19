@@ -35,13 +35,31 @@ static void ksu_install_manager_fd_tw_func(struct callback_head *cb)
     kfree(cb);
 }
 
-int ksu_handle_setresuid(uid_t ruid, uid_t euid, uid_t suid)
+#ifdef CONFIG_KSU_SUSFS
+#include <linux/susfs.h>
+#endif
+
+int ksu_handle_setresuid(struct cred *new, uid_t ruid, uid_t euid, uid_t suid)
 {
     // we rely on the fact that zygote always call setresuid(3) with same uids
     uid_t new_uid = ruid;
     uid_t old_uid = current_uid().val;
 
     pr_debug("handle_setresuid from %d to %d\n", old_uid, new_uid);
+
+#ifdef CONFIG_KSU_SUSFS
+    bool is_zygote_child = is_zygote(current_cred());
+    if (likely(is_zygote_child)) {
+        if (unlikely(!(current->android_kabi_reserved1 & TASK_STRUCT_KABI1_IS_ZYGOTE))) {
+            current->android_kabi_reserved1 |= TASK_STRUCT_KABI1_IS_ZYGOTE;
+            pr_info("susfs: Found newly created zygote process pid=%d\n", current->pid);
+        }
+    }
+
+    if (new && !ksu_is_allow_uid_for_current(new_uid)) {
+        new->user->android_kabi_reserved1 |= USER_STRUCT_KABI1_NON_ROOT_USER_APP_PROFILE;
+    }
+#endif
 
     if (unlikely(is_uid_manager(new_uid))) {
 
