@@ -152,6 +152,7 @@ int susfs_add_sus_mount(struct st_susfs_sus_mount* __user user_info);
 /* sus_kstat */
 #ifdef CONFIG_KSU_SUSFS_SUS_KSTAT
 int susfs_add_sus_kstat(struct st_susfs_sus_kstat* __user user_info);
+int susfs_update_sus_kstat(struct st_susfs_sus_kstat* __user user_info);
 #endif
 /* try_umount */
 #ifdef CONFIG_KSU_SUSFS_TRY_UMOUNT
