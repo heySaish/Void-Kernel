@@ -489,13 +489,14 @@ int susfs_sus_su(struct st_sus_su* __user user_info) {
 #endif // #ifdef CONFIG_KSU_SUSFS_SUS_SU
 
 /* susfs_init */
-void susfs_init(void) {
+int susfs_init(void) {
 	spin_lock_init(&susfs_spin_lock);
 #ifdef CONFIG_KSU_SUSFS_SPOOF_UNAME
 	spin_lock_init(&susfs_uname_spin_lock);
 	susfs_my_uname_init();
 #endif
 	SUSFS_LOGI("susfs is initialized!\n");
+	return 0;
 }
 late_initcall(susfs_init);
 
