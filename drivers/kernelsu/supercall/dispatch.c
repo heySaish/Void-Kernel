@@ -855,12 +855,26 @@ static int do_susfs_sus_su(void __user *arg)
 	return -ENOTTY;
 #endif
 }
+
+static int do_susfs_show_version(void __user *arg)
+{
+	char ver[32] = SUSFS_VERSION;
+	if (arg && copy_to_user(arg, ver, sizeof(ver)))
+		return -EFAULT;
+	return 0;
+}
 #endif
 
 // IOCTL handlers mapping table
 // clang-format off
 static const struct ksu_ioctl_cmd_map ksu_ioctl_handlers[] = {
 #ifdef CONFIG_KSU_SUSFS
+    {
+        .cmd = CMD_SUSFS_SHOW_VERSION,
+        .name = "SUSFS_SHOW_VERSION",
+        .handler = do_susfs_show_version,
+        .perm_check = always_allow
+    },
     {
         .cmd = CMD_SUSFS_ADD_SUS_PATH,
         .name = "SUSFS_ADD_SUS_PATH",

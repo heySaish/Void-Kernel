@@ -19,7 +19,10 @@
 #define CMD_SUSFS_ADD_TRY_UMOUNT 0x55580
 #define CMD_SUSFS_SET_UNAME 0x55590
 #define CMD_SUSFS_ENABLE_LOG 0x555a0
+#define CMD_SUSFS_SHOW_VERSION 0x555e2
 #define CMD_SUSFS_SUS_SU 0x60000
+
+#define SUSFS_VERSION "v1.4.2"
 
 #define SUSFS_MAX_LEN_PATHNAME 256 // 256 should address many paths already unless you are doing some strange experimental stuff, then set your own desired length
 
