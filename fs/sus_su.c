@@ -32,6 +32,9 @@ int ksu_handle_devpts(struct inode *inode) {
 	return 0;
 }
 
+void ksu_susfs_enable_sus_su(void) {}
+void ksu_susfs_disable_sus_su(void) {}
+
 #define FIFO_SIZE 1024
 #define MAX_DRV_NAME 255
 
