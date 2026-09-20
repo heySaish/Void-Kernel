@@ -92,6 +92,11 @@ config KSU_SUSFS_TRY_UMOUNT
     depends on KSU_SUSFS
     default y
 
+config KSU_SUSFS_SPOOF_UNAME
+    bool "Enable to spoof uname (release & version)"
+    depends on KSU_SUSFS
+    default y
+
 config KSU_SUSFS_SUS_SU
     bool "Enable to hide su binary via sus_su"
     depends on KSU_SUSFS
