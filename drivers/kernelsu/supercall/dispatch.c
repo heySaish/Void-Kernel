@@ -856,6 +856,16 @@ static int do_susfs_set_uname(void __user *arg)
 #endif
 }
 
+static int do_susfs_enable_log(void __user *arg)
+{
+#ifdef CONFIG_KSU_SUSFS_ENABLE_LOG
+	susfs_set_log((bool)(unsigned long)arg);
+	return 0;
+#else
+	return -ENOTTY;
+#endif
+}
+
 static int do_susfs_sus_su(void __user *arg)
 {
 #ifdef CONFIG_KSU_SUSFS_SUS_SU
@@ -924,6 +934,12 @@ static const struct ksu_ioctl_cmd_map ksu_ioctl_handlers[] = {
         .cmd = CMD_SUSFS_SET_UNAME,
         .name = "SUSFS_SET_UNAME",
         .handler = do_susfs_set_uname,
+        .perm_check = only_root
+    },
+    {
+        .cmd = CMD_SUSFS_ENABLE_LOG,
+        .name = "SUSFS_ENABLE_LOG",
+        .handler = do_susfs_enable_log,
         .perm_check = only_root
     },
     {
