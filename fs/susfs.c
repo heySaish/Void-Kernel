@@ -111,6 +111,60 @@ int susfs_add_sus_path(struct st_susfs_sus_path* __user user_info) {
 	return 0;
 }
 
+static void susfs_clear_sus_path_inode(char *target_pathname) {
+	struct path p;
+	struct inode *inode = NULL;
+	int err = 0;
+
+	err = kern_path(target_pathname, LOOKUP_FOLLOW, &p);
+	if (err) {
+		return;
+	}
+
+	inode = d_inode(p.dentry);
+	if (!inode) {
+		path_put(&p);
+		return;
+	}
+
+	spin_lock(&inode->i_lock);
+	inode->i_state &= ~INODE_STATE_SUS_PATH;
+	spin_unlock(&inode->i_lock);
+
+	path_put(&p);
+}
+
+int susfs_remove_sus_path(struct st_susfs_sus_path* __user user_info) {
+	struct st_susfs_sus_path info;
+	struct st_susfs_sus_path_hlist *tmp_entry;
+	struct hlist_node *tmp_node;
+	int bkt;
+	bool removed = false;
+
+	if (copy_from_user(&info, user_info, sizeof(info))) {
+		SUSFS_LOGE("failed copying from userspace\n");
+		return 1;
+	}
+
+	spin_lock(&susfs_spin_lock);
+	hash_for_each_safe(SUS_PATH_HLIST, bkt, tmp_node, tmp_entry, node) {
+		if (!strcmp(tmp_entry->target_pathname, info.target_pathname) || (info.target_ino && tmp_entry->target_ino == info.target_ino)) {
+			hash_del(&tmp_entry->node);
+			kfree(tmp_entry);
+			removed = true;
+			break;
+		}
+	}
+	spin_unlock(&susfs_spin_lock);
+
+	if (removed) {
+		susfs_clear_sus_path_inode(info.target_pathname);
+		SUSFS_LOGI("target_pathname: '%s' is successfully removed from SUS_PATH_HLIST\n", info.target_pathname);
+		return 0;
+	}
+	return 1;
+}
+
 int susfs_sus_ino_for_filldir64(unsigned long ino) {
 	struct st_susfs_sus_path_hlist *entry;
 

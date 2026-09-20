@@ -802,6 +802,15 @@ static int do_susfs_add_sus_path(void __user *arg)
 #endif
 }
 
+static int do_susfs_remove_sus_path(void __user *arg)
+{
+#ifdef CONFIG_KSU_SUSFS_SUS_PATH
+	return susfs_remove_sus_path((struct st_susfs_sus_path __user *)arg);
+#else
+	return -ENOTTY;
+#endif
+}
+
 static int do_susfs_add_sus_mount(void __user *arg)
 {
 #ifdef CONFIG_KSU_SUSFS_SUS_MOUNT
@@ -879,6 +888,12 @@ static const struct ksu_ioctl_cmd_map ksu_ioctl_handlers[] = {
         .cmd = CMD_SUSFS_ADD_SUS_PATH,
         .name = "SUSFS_ADD_SUS_PATH",
         .handler = do_susfs_add_sus_path,
+        .perm_check = only_root
+    },
+    {
+        .cmd = CMD_SUSFS_REMOVE_SUS_PATH,
+        .name = "SUSFS_REMOVE_SUS_PATH",
+        .handler = do_susfs_remove_sus_path,
         .perm_check = only_root
     },
     {

@@ -12,6 +12,7 @@
 /********/
 /* shared with userspace ksu_susfs tool */
 #define CMD_SUSFS_ADD_SUS_PATH 0x55550
+#define CMD_SUSFS_REMOVE_SUS_PATH 0x55551
 #define CMD_SUSFS_ADD_SUS_MOUNT 0x55560
 #define CMD_SUSFS_ADD_SUS_KSTAT 0x55570
 #define CMD_SUSFS_UPDATE_SUS_KSTAT 0x55571
@@ -146,6 +147,7 @@ struct st_sus_su {
 /* sus_path */
 #ifdef CONFIG_KSU_SUSFS_SUS_PATH
 int susfs_add_sus_path(struct st_susfs_sus_path* __user user_info);
+int susfs_remove_sus_path(struct st_susfs_sus_path* __user user_info);
 int susfs_sus_ino_for_filldir64(unsigned long ino);
 #endif
 /* sus_mount */
