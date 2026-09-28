@@ -140,6 +140,11 @@ static int __nocfi my_sel_open_handle_status(struct inode *inode, struct file *f
 		}
 	}
 
+	if (unlikely(!orig_sel_open_handle_status || orig_sel_open_handle_status == my_sel_open_handle_status)) {
+		pr_err_ratelimited("ksu_selinux_hide: orig_sel_open_handle_status invalid or recursive!\n");
+		return -EINVAL;
+	}
+
 	return orig_sel_open_handle_status(inode, filp);
 }
 
@@ -209,6 +214,11 @@ static void hook_selinux_status_open(void)
 
 	if (!ops->open) {
 		pr_err("ksu_selinux_hide: sel_handle_status_ops->open is NULL\n");
+		return;
+	}
+
+	if (ops->open == my_sel_open_handle_status) {
+		pr_warn("ksu_selinux_hide: sel_handle_status_ops->open is already hooked!\n");
 		return;
 	}
 	
