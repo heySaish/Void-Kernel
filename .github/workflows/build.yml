@@ -7,6 +7,7 @@ jobs:
   build:
     name: Compile Void Kernel
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout Kernel Source
         uses: actions/checkout@v4
@@ -14,15 +15,49 @@ jobs:
       - name: Setup Build Dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y git ccache automake flex lzop bison gperf build-essential zip curl zlib1g-dev libncurses5-dev libssl-dev libxml2-utils xsltproc bc rsync libelf-dev
+          sudo apt-get install -y \
+            git ccache automake flex lzop bison gperf build-essential \
+            zip curl zlib1g-dev libncurses5-dev libssl-dev \
+            libxml2-utils xsltproc bc rsync libelf-dev
+
+      # Cache Neutron Clang
+      - name: Cache Neutron Clang
+        uses: actions/cache@v4
+        with:
+          path: clang
+          key: neutron-clang-${{ runner.os }}-24
+          restore-keys: |
+            neutron-clang-${{ runner.os }}-
 
       - name: Setup Neutron Clang
         run: |
-          mkdir -p clang
-          cd clang
-          curl -LO "https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman"
-          bash antman -S
-          cd ..
+          if [ ! -x clang/bin/clang ]; then
+            mkdir -p clang
+            cd clang
+            curl -LO "https://raw.githubusercontent.com/Neutron-Toolchains/antman/main/antman"
+            bash antman -S
+            cd ..
+          else
+            echo "Neutron Clang cache hit!"
+          fi
+
+      # Cache compiler output
+      - name: Cache ccache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: kernel-ccache-${{ runner.os }}-${{ hashFiles('Makefile', 'arch/arm64/Makefile', '**/Kconfig*') }}
+          restore-keys: |
+            kernel-ccache-${{ runner.os }}-
+
+      - name: Configure ccache
+        run: |
+          mkdir -p ~/.cache/ccache
+          ccache --set-config=cache_dir=$HOME/.cache/ccache
+          ccache --set-config=max_size=5G
+          ccache --set-config=compression=true
+          ccache --zero-stats
+          ccache --show-config
 
       - name: Setup VoidSU Driver
         run: |
@@ -33,7 +68,7 @@ jobs:
           export PATH="$(pwd)/clang/bin:$PATH"
           export ARCH=arm64
           export SUBARCH=arm64
-          export CC=clang
+          export CC="ccache clang"
           export KBUILD_BUILD_USER=saish
           export KBUILD_BUILD_HOST=void
 
@@ -48,10 +83,9 @@ jobs:
             make O=out defconfig
           fi
 
-          # Compile Kernel & DTBs
           make -j$(nproc --all) O=out \
             ARCH=arm64 \
-            CC=clang \
+            CC="ccache clang" \
             CLANG_TRIPLE=aarch64-linux-gnu- \
             CROSS_COMPILE=aarch64-linux-gnu- \
             CROSS_COMPILE_ARM32=arm-linux-gnueabi- \
@@ -61,15 +95,22 @@ jobs:
             KBUILD_BUILD_USER=saish \
             KBUILD_BUILD_HOST=void
 
+      - name: ccache statistics
+        run: |
+          ccache --show-stats
+
       - name: Package with AnyKernel3
         run: |
           git clone https://github.com/osm0sis/AnyKernel3 --depth=1 AK3
+
           if [ -f out/arch/arm64/boot/Image.gz-dtb ]; then
             cp out/arch/arm64/boot/Image.gz-dtb AK3/
           elif [ -f out/arch/arm64/boot/Image.gz ]; then
             cp out/arch/arm64/boot/Image.gz AK3/
           fi
+
           cp anykernel.sh AK3/
+
           cd AK3
           zip -r9 ../Void-Kernel-Clean.zip * -x .git README.md
 
